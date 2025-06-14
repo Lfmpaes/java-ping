@@ -1,0 +1,20 @@
+name: Continuous Delivery
+
+on:
+  push:
+    branches: main
+
+jobs:
+  delivery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        run: |
+          docker build -t lfmpaes/java-ping .
+          docker push lfmpaes/java-ping
